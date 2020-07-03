@@ -387,6 +387,14 @@ open class PieChartRenderer: DataRenderer
                     entry: e,
                     dataSetIndex: i,
                     viewPortHandler: viewPortHandler)
+                
+                var index = valueText.startIndex
+                var numberOfLines = 0
+                while index != valueText.endIndex {
+                    let range = valueText.lineRange(for: index..<index)
+                    numberOfLines += 1
+                    index = range.upperBound
+                }
 
                 let sliceXBase = cos(transformedAngle.DEG2RAD)
                 let sliceYBase = sin(transformedAngle.DEG2RAD)
@@ -436,13 +444,13 @@ open class PieChartRenderer: DataRenderer
                     {
                         pt2 = CGPoint(x: pt1.x - polyline2Length, y: pt1.y)
                         align = .right
-                        labelPoint = CGPoint(x: pt2.x - 5, y: pt2.y - lineHeight)
+                        labelPoint = CGPoint(x: pt2.x - 5, y: pt2.y - lineHeight * ceil(CGFloat(numberOfLines) / 2))
                     }
                     else
                     {
                         pt2 = CGPoint(x: pt1.x + polyline2Length, y: pt1.y)
                         align = .left
-                        labelPoint = CGPoint(x: pt2.x + 5, y: pt2.y - lineHeight)
+                        labelPoint = CGPoint(x: pt2.x + 5, y: pt2.y - lineHeight * ceil(CGFloat(numberOfLines) / 2))
                     }
 
                     DrawLine: do

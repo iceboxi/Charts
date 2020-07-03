@@ -89,9 +89,21 @@ class PiePolylineChartViewController: DemoBaseViewController {
         pFormatter.maximumFractionDigits = 1
         pFormatter.multiplier = 1
         pFormatter.percentSymbol = " %"
-        data.setValueFormatter(DefaultValueFormatter(formatter: pFormatter))
+        
+        // custom multiple line text
+        let formatter = DefaultValueFormatter(block: { (value, e, index, handle) -> String in
+            var valueText = pFormatter.string(from: NSNumber(floatLiteral: value)) ?? ""
+            if let pe = e as? PieChartDataEntry {
+                valueText = "\(pe.label ?? "")\n\(pe.value))\n" + valueText
+            }
+            return valueText
+        })
+        
+        data.setValueFormatter(formatter)
         data.setValueFont(.systemFont(ofSize: 11, weight: .light))
         data.setValueTextColor(.black)
+        
+        
         
         chartView.data = data
         chartView.highlightValues(nil)
